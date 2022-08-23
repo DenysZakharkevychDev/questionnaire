@@ -1,1 +1,18 @@
-<p>navbar works!</p>
+<mat-toolbar class="links-wrapper" color="primary">
+  <a
+    #rla1="routerLinkActive"
+    mat-raised-button
+    [routerLink]="path.QUESTION_MANAGEMENT"
+    routerLinkActive=""
+    [color]="rla1.isActive && 'accent'"
+    >Question Management</a
+  >
+  <a
+    #rla2="routerLinkActive"
+    mat-raised-button
+    [routerLink]="path.LIST_OF_QUESTIONS"
+    routerLinkActive=""
+    [color]="rla2.isActive && 'accent'"
+    >Lists of Questions</a
+  >
+</mat-toolbar>
