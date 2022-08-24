@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { localStorageKeys } from '../constants/local-storage.constant';
-import { IQuestion } from '../models/question.model';
+import { Question } from './../models/question.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuestionService {
-  questionsSubject: BehaviorSubject<IQuestion[]>;
-  questions$: Observable<IQuestion[]>;
+  questionsSubject: BehaviorSubject<Question[]>;
+  questions$: Observable<Question[]>;
 
   constructor() {
     const questions = this.getQuestionsFromLocalStorage();
@@ -19,7 +19,7 @@ export class QuestionService {
     });
   }
 
-  addQuestion(question: IQuestion) {
+  addQuestion(question: Question) {
     const questions = this.questionsSubject.getValue();
     this.questionsSubject.next([...questions, question]);
   }
@@ -33,7 +33,7 @@ export class QuestionService {
     return (
       (JSON.parse(
         localStorage.getItem(localStorageKeys.QUESTIONS) as string
-      ) as IQuestion[]) || []
+      ) as Question[]) || []
     );
   }
 }
