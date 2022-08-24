@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from './../../../shared/shared.module';
+import { MaterialUiModule } from './../../../shared/components/material-ui/material-ui.module';
+import { QuestionCardPreviewModule } from './components/question-card-preview/question-card-preview.module';
 import { QuestionManagementRoutingModule } from './question-management-routing.module';
 import { QuestionManagementComponent } from './question-management.component';
 
@@ -11,7 +12,8 @@ import { QuestionManagementComponent } from './question-management.component';
     CommonModule,
     QuestionManagementRoutingModule,
     RouterModule,
-    SharedModule,
+    QuestionCardPreviewModule,
+    MaterialUiModule,
   ],
 })
 export class QuestionManagementModule {}
