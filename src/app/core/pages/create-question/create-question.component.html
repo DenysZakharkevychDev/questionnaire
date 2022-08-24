@@ -2,16 +2,12 @@
   <mat-radio-group
     class="question-type-radio-buttons-group"
     aria-label="Select an option"
+    [(ngModel)]="selectedType"
   >
-    <mat-radio-button [value]="QuestionType.SINGLE_CHOICE">{{
-      QuestionType.SINGLE_CHOICE
-    }}</mat-radio-button>
-    <mat-radio-button [value]="QuestionType.MULTIPLE_CHOICE">{{
-      QuestionType.MULTIPLE_CHOICE
-    }}</mat-radio-button>
-    <mat-radio-button [value]="QuestionType.OPEN">{{
-      QuestionType.OPEN
+    <mat-radio-button *ngFor="let type of QuestionTypeArr" [value]="type">{{
+      type
     }}</mat-radio-button>
   </mat-radio-group>
+  <app-question-card-constructor></app-question-card-constructor>
   <button mat-raised-button (click)="createQuestion()">Create question</button>
 </div>

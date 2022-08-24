@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IQuestion } from '../../models/question.model';
+import { QuestionService } from '../../services/question.service';
 import { path } from './../../constants/path.constant';
-import { ICard } from './../../models/card.model';
-import { CardService } from './../../services/card.service';
 
 @Component({
   selector: 'app-question-management',
@@ -11,10 +11,10 @@ import { CardService } from './../../services/card.service';
 })
 export class QuestionManagementComponent implements OnInit {
   path = path;
-  cards$: Observable<ICard[]>;
-  constructor(private cardService: CardService) {}
+  cards$: Observable<IQuestion[]>;
+  constructor(private questionService: QuestionService) {}
 
   ngOnInit(): void {
-    this.cards$ = this.cardService.cards$;
+    this.cards$ = this.questionService.questions$;
   }
 }

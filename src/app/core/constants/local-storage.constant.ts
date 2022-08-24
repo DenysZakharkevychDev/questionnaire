@@ -1,3 +1,3 @@
 export const localStorageKeys = {
-  CARDS: 'cards',
+  QUESTIONS: 'questions',
 };
