@@ -12,7 +12,6 @@ import { IQuestionWithSingleOptionType } from './../../models/question.model';
 })
 export class CreateQuestionComponent implements OnInit {
   QuestionType = QuestionType;
-  QuestionTypeArr = Object.values(QuestionType);
   selectedType: QuestionType = QuestionType.SINGLE_CHOICE;
 
   constructor(

@@ -1,12 +1,6 @@
 <div class="constructor-container">
-  <mat-radio-group
-    class="question-type-radio-buttons-group"
-    aria-label="Select an option"
-    [(ngModel)]="selectedType"
-  >
-    <mat-radio-button *ngFor="let type of QuestionTypeArr" [value]="type">{{
-      type
-    }}</mat-radio-button>
-  </mat-radio-group>
+  <app-question-type-selector
+    [(selectedType)]="selectedType"
+  ></app-question-type-selector>
   <app-question-card-constructor></app-question-card-constructor>
 </div>

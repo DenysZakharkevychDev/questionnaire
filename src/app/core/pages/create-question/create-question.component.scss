@@ -1,11 +1,5 @@
 .constructor-container {
   display: flex;
   flex-direction: column;
-}
-
-.question-type-radio-buttons-group {
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  gap: 25px;
+  align-items: center;
 }
