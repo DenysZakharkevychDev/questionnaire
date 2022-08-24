@@ -1,1 +1,17 @@
-<p>create-question works!</p>
+<div class="constructor-container">
+  <mat-radio-group
+    class="question-type-radio-buttons-group"
+    aria-label="Select an option"
+  >
+    <mat-radio-button [value]="QuestionType.SINGLE_CHOICE">{{
+      QuestionType.SINGLE_CHOICE
+    }}</mat-radio-button>
+    <mat-radio-button [value]="QuestionType.MULTIPLE_CHOICE">{{
+      QuestionType.MULTIPLE_CHOICE
+    }}</mat-radio-button>
+    <mat-radio-button [value]="QuestionType.OPEN">{{
+      QuestionType.OPEN
+    }}</mat-radio-button>
+  </mat-radio-group>
+  <button mat-raised-button (click)="createQuestion()">Create question</button>
+</div>

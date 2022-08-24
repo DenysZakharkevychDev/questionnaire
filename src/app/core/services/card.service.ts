@@ -26,12 +26,12 @@ export class CardService {
 
   setCardsToLocalStorage() {
     const cards = this.cardsSubject.getValue();
-    localStorage.setItem(localStorageKeys.cards, JSON.stringify(cards));
+    localStorage.setItem(localStorageKeys.CARDS, JSON.stringify(cards));
   }
 
   getCardsFromLocalStorage() {
     return JSON.parse(
-      localStorage.getItem(localStorageKeys.cards) as string
+      localStorage.getItem(localStorageKeys.CARDS) as string
     ) as ICard[];
   }
 }
