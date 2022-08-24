@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { getRequiredErrorMsg } from './../../../../utils/validation.util';
+import { Router } from '@angular/router';
+import { path } from '../../../../constants/path.constant';
+import { QuestionType } from '../../../../enums/question-type.enum';
+import { IQuestionWithSingleOptionType } from '../../../../models/question.model';
+import { QuestionService } from '../../../../services/question.service';
 
 @Component({
   selector: 'app-question-card-constructor',
@@ -8,23 +11,24 @@ import { getRequiredErrorMsg } from './../../../../utils/validation.util';
   styleUrls: ['./question-card-constructor.component.scss'],
 })
 export class QuestionCardConstructorComponent implements OnInit {
-  form: FormGroup = new FormGroup({
-    questionText: new FormControl('', [Validators.required]),
-  });
-  constructor() {}
+  QuestionType = QuestionType;
+  selectedType: QuestionType = QuestionType.SINGLE_CHOICE;
+
+  constructor(
+    private questionService: QuestionService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
-  public get questionTextFormControl(): FormControl {
-    return this.form.get('questionText') as FormControl;
+  createQuestion() {
+    const question: IQuestionWithSingleOptionType = {
+      creationDate: new Date(),
+      type: QuestionType.SINGLE_CHOICE,
+      text: 'Дано трикутник АВС. ВD – бісектриса трикутника, ∠BAC = 60°, ∠CBD = 35°',
+      choicesOfAnswers: ['First choice', 'Second choice'],
+    };
+    this.questionService.addQuestion(question);
+    this.router.navigate([`/${path.QUESTION_MANAGEMENT}`]);
   }
-
-  public get questionTextErrorMsg(): string {
-    if (this.questionTextFormControl.hasError('required')) {
-      return getRequiredErrorMsg('question text');
-    }
-    return '';
-  }
-
-  onSubmit() {}
 }

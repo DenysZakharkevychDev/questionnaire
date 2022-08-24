@@ -1,17 +1,6 @@
-<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="fill">
-    <mat-label>Question</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="questionText"
-      placeholder="Enter your question text here"
-    />
-    <mat-error *ngIf="questionTextFormControl.invalid">
-      {{ questionTextErrorMsg }}
-    </mat-error>
-  </mat-form-field>
-  <button mat-raised-button [disabled]="!form.valid" type="submit">
-    Create question
-  </button>
-</form>
+<div class="constructor-container">
+  <app-question-type-selector
+    [(selectedType)]="selectedType"
+  ></app-question-type-selector>
+  <app-question-card-form></app-question-card-form>
+</div>
