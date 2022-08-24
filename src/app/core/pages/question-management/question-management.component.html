@@ -1,1 +1,14 @@
-<p>question-management works!</p>
+<div class="main-container">
+  <a
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/' + path.CREATE_QUESTION]"
+    >Create Question</a
+  >
+  <app-question-card-preview
+    *ngFor="let card of cards$ | async"
+    [creationDate]="card.creationDate"
+    [text]="card.text"
+    [type]="card.type"
+  ></app-question-card-preview>
+</div>

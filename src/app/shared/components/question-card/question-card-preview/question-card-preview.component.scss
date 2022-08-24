@@ -1,0 +1,24 @@
+.main-container {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.date-and-type-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text {
+  margin: 0;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-around;
+
+  button {
+    width: 100px;
+  }
+}

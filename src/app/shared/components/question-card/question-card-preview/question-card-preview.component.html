@@ -1,0 +1,11 @@
+<mat-card class="main-container">
+  <div class="date-and-type-container">
+    <span>{{ creationDate | date: "medium" }}</span>
+    <span>{{ type }}</span>
+  </div>
+  <p class="mat-h3 text">{{ text }}</p>
+  <div class="buttons-container">
+    <button mat-raised-button color="primary">Edit</button>
+    <button mat-raised-button color="warn">Delete</button>
+  </div>
+</mat-card>
