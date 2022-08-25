@@ -1,6 +1,86 @@
-<div class="constructor-container">
-  <app-question-type-selector
-    [(selectedType)]="selectedType"
-  ></app-question-type-selector>
-  <app-question-card-form></app-question-card-form>
-</div>
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-radio-group
+    class="question-type-selector-container"
+    aria-label="Select an option"
+    formControlName="selectedType"
+  >
+    <mat-radio-button *ngFor="let type of QuestionTypeArr" [value]="type">{{
+      type
+    }}</mat-radio-button>
+  </mat-radio-group>
+  <mat-form-field appearance="fill">
+    <mat-label>Question</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="questionText"
+      placeholder="Enter your question text here"
+    />
+    <mat-error *ngIf="questionTextFormControl.invalid">
+      {{ questionTextErrorMsg }}
+    </mat-error>
+  </mat-form-field>
+  <div [ngSwitch]="selectedTypeFormControl.value">
+    <ng-template [ngSwitchCase]="QuestionType.SINGLE_CHOICE">
+      <mat-radio-group formArrayName="choicesOfAnswers">
+        <div
+          class="choice-of-answer-container"
+          *ngFor="
+            let choice of choicesOfAnswersFormArray.value;
+            let i = index;
+            trackBy: trackByFn
+          "
+        >
+          <mat-radio-button disabled="true"></mat-radio-button>
+          <mat-form-field appearance="fill">
+            <input
+              class="answer-input"
+              type="text"
+              matInput
+              formControlName="{{ i }}"
+            />
+          </mat-form-field>
+          <mat-icon
+            aria-hidden="false"
+            fontIcon="close"
+            (click)="removeChoiceOfAnswer(i)"
+          ></mat-icon>
+        </div>
+      </mat-radio-group>
+    </ng-template>
+    <ng-template [ngSwitchCase]="QuestionType.MULTIPLE_CHOICE">
+      <div formArrayName="choicesOfAnswers">
+        <div
+          class="choice-of-answer-container"
+          *ngFor="
+            let choice of choicesOfAnswersFormArray.value;
+            let i = index;
+            trackBy: trackByFn
+          "
+        >
+          <mat-checkbox></mat-checkbox>
+          <mat-form-field appearance="fill">
+            <input
+              class="answer-input"
+              type="text"
+              matInput
+              formControlName="{{ i }}"
+            />
+          </mat-form-field>
+          <mat-icon aria-hidden="false" fontIcon="close"></mat-icon>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <button
+    *ngIf="selectedTypeFormControl.value !== QuestionType.OPEN"
+    mat-raised-button
+    (click)="addChoiceOfAnswer()"
+    type="button"
+  >
+    Add choice
+  </button>
+  <button mat-raised-button [disabled]="!form.valid" type="submit">
+    Create question
+  </button>
+</form>
