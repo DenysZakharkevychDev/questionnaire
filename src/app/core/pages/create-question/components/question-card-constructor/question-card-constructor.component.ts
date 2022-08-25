@@ -12,6 +12,9 @@ import { QuestionType } from '../../../../enums/question-type.enum';
 import { IQuestionWithSingleOptionType } from '../../../../models/question.model';
 import { QuestionService } from '../../../../services/question.service';
 import { getRequiredErrorMsg } from '../../../../utils/validation.util';
+import { localStorageKeys } from './../../../../constants/local-storage.constant';
+import { LocalStorageService } from './../../../../services/local-storage.service';
+import { IQuestionConstructorFormValues } from './interfaces/question-constructor-form.interface';
 
 @Component({
   selector: 'app-question-card-constructor',
@@ -20,20 +23,40 @@ import { getRequiredErrorMsg } from '../../../../utils/validation.util';
 })
 export class QuestionCardConstructorComponent implements OnInit {
   form: FormGroup;
+  formInitialValues: IQuestionConstructorFormValues = {
+    selectedType: QuestionType.SINGLE_CHOICE,
+    questionText: '',
+    choicesOfAnswers: ['answer1'],
+  };
   QuestionType = QuestionType;
   QuestionTypeArr = Object.values(QuestionType);
 
   constructor(
     private fb: FormBuilder,
     private questionService: QuestionService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
+    const questionConstructorFormValues: IQuestionConstructorFormValues =
+      this.localStorageService.getFromLocalStorage(
+        localStorageKeys.QUESTION_CONSTRUCTOR_FORM_VALUES
+      );
+
+    const formValues: IQuestionConstructorFormValues =
+      questionConstructorFormValues || this.formInitialValues;
+
     this.form = this.fb.group({
-      selectedType: [QuestionType.SINGLE_CHOICE],
-      questionText: ['', [Validators.required]],
+      selectedType: [formValues.selectedType],
+      questionText: [formValues.questionText, [Validators.required]],
       choicesOfAnswers: this.fb.array([['answer1', Validators.required]]),
+    });
+    this.form.valueChanges.subscribe((data) => {
+      this.localStorageService.setToLocalStorage(
+        localStorageKeys.QUESTION_CONSTRUCTOR_FORM_VALUES,
+        data
+      );
     });
   }
 
@@ -66,8 +89,7 @@ export class QuestionCardConstructorComponent implements OnInit {
   }
 
   addChoiceOfAnswer() {
-    const choicesOfAnswersArrayLenght =
-      this.choicesOfAnswersFormArray.value.length;
+    const choicesOfAnswersArrayLenght = this.choicesOfAnswersFormArray.length;
     const indexOfAnswer = choicesOfAnswersArrayLenght + 1;
     this.choicesOfAnswersFormArray.push(
       new FormControl('answer' + `${indexOfAnswer}`, Validators.required)
