@@ -11,10 +11,10 @@ import { Question } from './../../models/question.model';
 })
 export class QuestionManagementComponent implements OnInit {
   path = path;
-  cards$: Observable<Question[]>;
+  questions$: Observable<Question[]>;
   constructor(private questionService: QuestionService) {}
 
   ngOnInit(): void {
-    this.cards$ = this.questionService.questions$;
+    this.questions$ = this.questionService.questions$;
   }
 }

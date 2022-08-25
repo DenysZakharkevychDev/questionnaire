@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 import { localStorageKeys } from '../constants/local-storage.constant';
-import { Question } from './../models/question.model';
+import { ICreateQuestionData, Question } from './../models/question.model';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -20,9 +21,22 @@ export class QuestionService {
     });
   }
 
-  addQuestion(question: Question) {
+  addQuestion(createQuestionData: ICreateQuestionData) {
+    const newQuestion: Question = {
+      id: uuidv4(),
+      creationDate: new Date(),
+      ...createQuestionData,
+    };
     const questions = this.questionsSubject.getValue();
-    this.questionsSubject.next([...questions, question]);
+    this.questionsSubject.next([...questions, newQuestion]);
+  }
+
+  removeQuestion(id: string) {
+    const questions = this.questionsSubject.getValue();
+    const newQuestionsArray = questions.filter(
+      (question) => question.id !== id
+    );
+    this.questionsSubject.next(newQuestionsArray);
   }
 
   setQuestionsToLocalStorage() {

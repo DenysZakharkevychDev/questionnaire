@@ -9,10 +9,10 @@ import {
 import { Router } from '@angular/router';
 import { path } from '../../../../constants/path.constant';
 import { QuestionType } from '../../../../enums/question-type.enum';
-import { IQuestionWithSingleOptionType } from '../../../../models/question.model';
 import { QuestionService } from '../../../../services/question.service';
 import { getRequiredErrorMsg } from '../../../../utils/validation.util';
 import { localStorageKeys } from './../../../../constants/local-storage.constant';
+import { ICreateQuestionData } from './../../../../models/question.model';
 import { LocalStorageService } from './../../../../services/local-storage.service';
 import { IQuestionConstructorFormValues } from './interfaces/question-constructor-form.interface';
 
@@ -97,13 +97,12 @@ export class QuestionCardConstructorComponent implements OnInit {
   }
 
   onSubmit() {
-    const question: IQuestionWithSingleOptionType = {
-      creationDate: new Date(),
+    const createQuestionData: ICreateQuestionData = {
       type: this.selectedTypeFormControl.value,
       text: this.questionTextFormControl.value,
       choicesOfAnswers: this.choicesOfAnswersFormArray.value,
     };
-    this.questionService.addQuestion(question);
+    this.questionService.addQuestion(createQuestionData);
     this.router.navigate([`/${path.QUESTION_MANAGEMENT}`]);
   }
 }

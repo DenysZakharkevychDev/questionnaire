@@ -6,9 +6,7 @@
     >Create Question</a
   >
   <app-question-card-preview
-    *ngFor="let card of cards$ | async"
-    [creationDate]="card.creationDate"
-    [text]="card.text"
-    [type]="card.type"
+    *ngFor="let question of questions$ | async"
+    [question]="question"
   ></app-question-card-preview>
 </div>

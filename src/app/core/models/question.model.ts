@@ -1,8 +1,13 @@
 import { QuestionType } from '../enums/question-type.enum';
 export interface IQuestion {
+  id: string;
   creationDate: Date;
   type: QuestionType;
   text: string;
+}
+
+export interface ICreateQuestionData extends Pick<IQuestion, 'type' | 'text'> {
+  choicesOfAnswers?: string[];
 }
 
 export interface IQuestionWithSingleOptionType extends IQuestion {

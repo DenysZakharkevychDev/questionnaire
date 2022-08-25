@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { path } from './../../../../constants/path.constant';
+import { Question } from './../../../../models/question.model';
+import { QuestionService } from './../../../../services/question.service';
 
 @Component({
   selector: 'app-question-card-preview',
@@ -6,11 +10,20 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./question-card-preview.component.scss'],
 })
 export class QuestionCardPreviewComponent implements OnInit {
-  @Input() creationDate: Date;
-  @Input() type: string;
-  @Input() text: string;
+  @Input() question: Question;
 
-  constructor() {}
+  constructor(
+    private questionService: QuestionService,
+    private router: Router
+  ) {}
+
+  onEdit() {
+    this.router.navigate([`/${path.EDIT_QUESTION}`, this.question.id]);
+  }
+
+  onDelete() {
+    this.questionService.removeQuestion(this.question.id);
+  }
 
   ngOnInit(): void {}
 }
