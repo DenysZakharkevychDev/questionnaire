@@ -1,6 +1,6 @@
 export const path = {
-  QUESTION_MANAGEMENT: 'question-management',
-  CREATE_QUESTION: 'create-question',
-  EDIT_QUESTION: 'edit-question',
-  LIST_OF_QUESTIONS: 'list-of-questions',
+  question_management: 'question-management',
+  create_question: 'create-question',
+  edit_question: 'edit-question',
+  list_of_questions: 'list-of-questions',
 };

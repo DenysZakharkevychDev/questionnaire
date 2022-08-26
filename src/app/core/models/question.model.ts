@@ -6,7 +6,11 @@ export interface IQuestion {
   text: string;
 }
 
-export interface ICreateQuestionData extends Pick<IQuestion, 'type' | 'text'> {
+export interface IAddQuestionData extends Pick<IQuestion, 'type' | 'text'> {
+  choicesOfAnswers?: string[];
+}
+
+export interface IEditQuestionData extends Pick<IQuestion, 'type' | 'text'> {
   choicesOfAnswers?: string[];
 }
 

@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { localStorageKeys } from '../constants/local-storage.constant';
-import { ICreateQuestionData, Question } from './../models/question.model';
+import {
+  IAddQuestionData,
+  IEditQuestionData,
+  Question,
+} from './../models/question.model';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -21,28 +25,47 @@ export class QuestionService {
     });
   }
 
-  addQuestion(createQuestionData: ICreateQuestionData) {
+  getQuestions() {
+    const questions = this.questionsSubject.getValue();
+    return [...questions];
+  }
+
+  getQuestionIndexById(id: string) {
+    const questions = this.getQuestions();
+    const index = questions.findIndex((q) => q.id === id);
+    return index;
+  }
+
+  addQuestion(addQuestionData: IAddQuestionData) {
     const newQuestion: Question = {
       id: uuidv4(),
       creationDate: new Date(),
-      ...createQuestionData,
+      ...addQuestionData,
     };
-    const questions = this.questionsSubject.getValue();
+    const questions = this.getQuestions();
     this.questionsSubject.next([...questions, newQuestion]);
   }
 
+  editQuestion(id: string, editQuestionData: IEditQuestionData) {
+    const questions = this.getQuestions();
+    const indexOfQuestionToChange = this.getQuestionIndexById(id);
+    questions[indexOfQuestionToChange] = {
+      ...questions[indexOfQuestionToChange],
+      ...editQuestionData,
+    };
+    this.questionsSubject.next(questions);
+  }
+
   removeQuestion(id: string) {
-    const questions = this.questionsSubject.getValue();
-    const newQuestionsArray = questions.filter(
-      (question) => question.id !== id
-    );
+    const questions = this.getQuestions();
+    const newQuestionsArray = questions.filter((q) => q.id !== id);
     this.questionsSubject.next(newQuestionsArray);
   }
 
   setQuestionsToLocalStorage() {
-    const questions = this.questionsSubject.getValue();
+    const questions = this.getQuestions();
     this.localStorageService.setToLocalStorage(
-      localStorageKeys.QUESTIONS,
+      localStorageKeys.questions,
       questions
     );
   }
@@ -50,7 +73,7 @@ export class QuestionService {
   getQuestionsFromLocalStorage(): Question[] {
     return (
       (this.localStorageService.getFromLocalStorage(
-        localStorageKeys.QUESTIONS
+        localStorageKeys.questions
       ) as Question[]) || []
     );
   }

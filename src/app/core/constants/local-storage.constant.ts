@@ -1,4 +1,4 @@
 export const localStorageKeys = {
-  QUESTIONS: 'questions',
-  QUESTION_CONSTRUCTOR_FORM_VALUES: 'question-constructor-form-values',
+  questions: 'questions',
+  question_constructor_form_values: 'question-constructor-form-values',
 };

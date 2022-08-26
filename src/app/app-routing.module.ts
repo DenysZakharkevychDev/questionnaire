@@ -3,30 +3,30 @@ import { RouterModule, Routes } from '@angular/router';
 import { path } from './core/constants/path.constant';
 
 const routes: Routes = [
-  { path: '', redirectTo: path.QUESTION_MANAGEMENT, pathMatch: 'full' },
+  { path: '', redirectTo: path.question_management, pathMatch: 'full' },
   {
-    path: path.QUESTION_MANAGEMENT,
+    path: path.question_management,
     loadChildren: () =>
       import(
         './core/pages/question-management/question-management.module'
       ).then((m) => m.QuestionManagementModule),
   },
   {
-    path: path.CREATE_QUESTION,
+    path: path.create_question,
     loadChildren: () =>
       import('./core/pages/create-question/create-question.module').then(
         (m) => m.CreateQuestionModule
       ),
   },
   {
-    path: path.EDIT_QUESTION,
+    path: path.edit_question,
     loadChildren: () =>
       import('./core/pages/edit-question/edit-question.module').then(
         (m) => m.EditQuestionModule
       ),
   },
   {
-    path: path.LIST_OF_QUESTIONS,
+    path: path.list_of_questions,
     loadChildren: () =>
       import('./core/pages/list-of-questions/list-of-questions.module').then(
         (m) => m.ListOfQuestionsModule

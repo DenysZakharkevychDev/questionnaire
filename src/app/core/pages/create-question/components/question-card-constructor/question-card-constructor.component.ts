@@ -1,63 +1,48 @@
-import { Component, OnInit } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { path } from '../../../../constants/path.constant';
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { question } from '../../../../constants/question.constant';
 import { QuestionType } from '../../../../enums/question-type.enum';
-import { QuestionService } from '../../../../services/question.service';
 import { getRequiredErrorMsg } from '../../../../utils/validation.util';
-import { localStorageKeys } from './../../../../constants/local-storage.constant';
-import { ICreateQuestionData } from './../../../../models/question.model';
-import { LocalStorageService } from './../../../../services/local-storage.service';
-import { IQuestionConstructorFormValues } from './interfaces/question-constructor-form.interface';
+import { QuestionConstructorFormMode } from './../../../../enums/question-constructor-form-mode.enum';
+import { QuestionConstructorService } from './../../../../services/question-constructor.service';
 
 @Component({
   selector: 'app-question-card-constructor',
   templateUrl: './question-card-constructor.component.html',
   styleUrls: ['./question-card-constructor.component.scss'],
 })
-export class QuestionCardConstructorComponent implements OnInit {
+export class QuestionCardConstructorComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  formInitialValues: IQuestionConstructorFormValues = {
-    selectedType: QuestionType.SINGLE_CHOICE,
-    questionText: '',
-    choicesOfAnswers: ['answer1'],
-  };
   QuestionType = QuestionType;
-  QuestionTypeArr = Object.values(QuestionType);
+  questionTypeArr = question.questionTypeArr;
+  questionId: string | null;
+  unsubscribe$ = new Subject<void>();
+
+  @Input() mode: QuestionConstructorFormMode;
+  @Input() sumbitButtonText: string;
 
   constructor(
-    private fb: FormBuilder,
-    private questionService: QuestionService,
-    private router: Router,
-    private localStorageService: LocalStorageService
+    private questionConstructorService: QuestionConstructorService,
+    private route: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    const questionConstructorFormValues: IQuestionConstructorFormValues =
-      this.localStorageService.getFromLocalStorage(
-        localStorageKeys.QUESTION_CONSTRUCTOR_FORM_VALUES
-      );
-
-    const formValues: IQuestionConstructorFormValues =
-      questionConstructorFormValues || this.formInitialValues;
-
-    this.form = this.fb.group({
-      selectedType: [formValues.selectedType],
-      questionText: [formValues.questionText, [Validators.required]],
-      choicesOfAnswers: this.fb.array([['answer1', Validators.required]]),
-    });
-    this.form.valueChanges.subscribe((data) => {
-      this.localStorageService.setToLocalStorage(
-        localStorageKeys.QUESTION_CONSTRUCTOR_FORM_VALUES,
-        data
-      );
-    });
+    this.route.paramMap
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params: ParamMap) => {
+        this.questionId = params.get('id');
+      });
+    this.questionConstructorService.setQuestionId(this.questionId as string);
+    this.form = this.questionConstructorService.getForm(this.mode);
   }
 
   public get selectedTypeFormControl(): FormControl {
@@ -79,11 +64,6 @@ export class QuestionCardConstructorComponent implements OnInit {
     return '';
   }
 
-  removeChoiceOfAnswer(index: number) {
-    console.log(index);
-    this.choicesOfAnswersFormArray.removeAt(index);
-  }
-
   trackByFn(index: number, item: any) {
     return index;
   }
@@ -96,13 +76,17 @@ export class QuestionCardConstructorComponent implements OnInit {
     );
   }
 
+  removeChoiceOfAnswer(index: number) {
+    this.choicesOfAnswersFormArray.removeAt(index);
+    this.changeDetectorRef.detectChanges();
+  }
+
   onSubmit() {
-    const createQuestionData: ICreateQuestionData = {
-      type: this.selectedTypeFormControl.value,
-      text: this.questionTextFormControl.value,
-      choicesOfAnswers: this.choicesOfAnswersFormArray.value,
-    };
-    this.questionService.addQuestion(createQuestionData);
-    this.router.navigate([`/${path.QUESTION_MANAGEMENT}`]);
+    this.questionConstructorService.onSubmit();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

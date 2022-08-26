@@ -18,7 +18,7 @@ export class QuestionCardPreviewComponent implements OnInit {
   ) {}
 
   onEdit() {
-    this.router.navigate([`/${path.EDIT_QUESTION}`, this.question.id]);
+    this.router.navigate([`/${path.edit_question}`, this.question.id]);
   }
 
   onDelete() {
